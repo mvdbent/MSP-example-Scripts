@@ -40,7 +40,7 @@ function updateLogFile () {
 updateLogFile
 
 # Creat csv file headers
-echo "Jamf Pro Server,Organization Name,Updated-Activationcode,Previous-Activationcode,Alerts,Status" >> ${updateLog}
+echo "Jamf Pro Server;Organization Name;Updated-Activationcode;Previous-Activationcode;Alerts;Status" >> ${updateLog}
 
 #Variables
 APIuser="apiuser"                           		#JPS username with API privileges
@@ -83,7 +83,7 @@ do
 	# credentials check
 	credentialscheck=$(curl -s -k --header "Accept: application/xml" -u ${APIuser}:${APIpassword} https://$JamfProURL/JSSResource/activationcode | grep activation_code | wc -l | xargs)
 	if [ "$credentialscheck" == "0" ]; then
-		echo "${JamfProURL},,${activationcode},,Error connecting to Jamf API. Incorrect URL or Credentials" >> ${updateLog}
+		echo "${JamfProURL};;${activationcode};;Error connecting to Jamf API. Incorrect URL or Credentials" >> ${updateLog}
 	else
 
 	# Organization name 
@@ -102,10 +102,9 @@ do
 #	curl -ksu ${APIuser}:${APIpassword} https://$JamfProURL/JSSResource/activationcode --header "Content-Type: text/xml" --request PUT --data $flatXML
 		
 	# Log Result
-	echo ${JamfProURL},${organizationName},${activationcode},${oldActivationcode},,Completed >> ${updateLog}
+	echo "${JamfProURL};${organizationName};${activationcode};${oldActivationcode};;Completed" >> ${updateLog}
 	
 	fi
 done
 
 open -a Numbers ${updateLog}
-
